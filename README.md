@@ -1,0 +1,52 @@
+# Claude Code Delegator
+
+Delegate implementation plans from an orchestrating AI (e.g., Codex) to Claude Code for execution, then review the resulting diff — all in a plan-execute-review loop.
+
+## Overview
+
+This skill/toolkit lets an orchestrating AI (like Codex) own the planning and review phases while Claude Code handles implementation. The workflow is:
+
+1. **Plan** — Orchestrator reads context and produces a concrete plan.
+2. **Execute** — Orchestrator invokes Claude Code via the bundled wrapper to execute the plan.
+3. **Review** — Orchestrator inspects the diff and test results.
+4. **Correct** (optional) — One targeted correction pass if needed.
+5. **Report** — Final summary with changed files, tests, and residual risk.
+
+## Components
+
+| File | Purpose |
+|------|---------|
+| `SKILL.md` | Skill definition — the contract that drives orchestrator behavior |
+| `scripts/run-claude-code.sh` | Wrapper that invokes Claude Code with consistent flags |
+| `scripts/compact-claude-stream.py` | Compacts JSON stream output into a readable final report |
+| `scripts/jira-safe-text.py` | Strips Markdown for Jira MCP plain-text comments |
+| `tests/run_tests.sh` | Test runner |
+
+## Usage
+
+```bash
+# Default (pro model, quiet output)
+./scripts/run-claude-code.sh "your prompt here"
+
+# Flash model
+./scripts/run-claude-code.sh --flash "your prompt here"
+
+# Stream output (for debugging)
+./scripts/run-claude-code.sh --stream "your prompt here"
+
+# Environment variable overrides
+CLAUDE_DELEGATOR_MODEL='deepseek-v4-flash[1m]' \
+CLAUDE_DELEGATOR_EFFORT=medium \
+CLAUDE_DELEGATOR_PERMISSION_MODE=acceptEdits \
+  ./scripts/run-claude-code.sh "your prompt here"
+```
+
+## Requirements
+
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) installed and configured
+- Access to a Claude Code-compatible model
+- `python3` available for the JSON compactor
+
+## License
+
+MIT
