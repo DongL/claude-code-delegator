@@ -30,5 +30,7 @@ bash scripts/run-claude-code.sh --flash "test prompt"
 - Unknown tasks fall back to `deepseek-v4-pro[1m]` and `max` effort. Classified tiny/routine tasks use flash, while debugging and architecture tasks use pro. Override via `--pro`, `--flash`, `--effort`, or the matching env vars.
 - MCP defaults to `all`, preserving normal Claude Code project/user MCP discovery. Use `--mcp none` for a strict empty MCP config, or `--mcp jira|linear|sequential-thinking` to load only one server from `.mcp.json`.
 - Prompt adaptation defaults to `auto`. Use `--full-context` or `CLAUDE_DELEGATOR_CONTEXT_MODE=full` to bypass templates.
+- Subagents default to `off`; the wrapper passes `--disallowedTools Task Agent` unless `--allow-subagents` or `CLAUDE_DELEGATOR_SUBAGENTS=on` is set.
+- Quiet mode emits an immediate/progress heartbeat to stderr. Use `CLAUDE_DELEGATOR_HEARTBEAT_SECONDS=0` to disable it.
 - Compact output includes profiling metadata. Set `CLAUDE_DELEGATOR_PROFILE_LOG` to append JSONL records.
 - When consumed by an orchestrator, set `CLAUDE_DELEGATOR_DIR` to this project's root before invoking.
