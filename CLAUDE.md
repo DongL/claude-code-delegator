@@ -25,6 +25,6 @@ bash scripts/run-claude-code.sh --flash "test prompt"
 
 ## Design notes
 
-- The wrapper defaults to `acceptEdits` permission mode. Override with `CLAUDE_DELEGATOR_PERMISSION_MODE=bypassPermissions` for fully non-interactive use.
+- The wrapper defaults to `acceptEdits` permission mode. Use `--bypass` flag (or `CLAUDE_DELEGATOR_PERMISSION_MODE=bypassPermissions`) for fully non-interactive use.
 - Model defaults (`deepseek-v4-pro[1m]`) reflect a custom provider setup. Override via `CLAUDE_DELEGATOR_MODEL`.
 - When consumed by an orchestrator, set `CLAUDE_DELEGATOR_DIR` to this project's root before invoking.
