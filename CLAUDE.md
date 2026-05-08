@@ -1,4 +1,4 @@
-# Claude Code Delegator
+# Claude Code Delegate
 
 ## What this is
 
