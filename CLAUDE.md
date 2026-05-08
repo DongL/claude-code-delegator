@@ -15,6 +15,13 @@ A toolkit that lets an orchestrating AI (Codex, Cursor, etc.) delegate implement
 - `tests/run_tests.sh` — Test runner (bash, no external deps).
 - `CONTEXT.md` — Domain glossary for the project.
 
+## Git workflow
+
+- Never push directly to `main`.
+- Create a feature branch for every change: `feat/<short-description>`, `fix/<short-description>`, or `doc/<short-description>`.
+- After committing on the branch, push and open a pull request.
+- Merge via PR only — even for solo work. This keeps a clean history and gives a checkpoint for review.
+
 ## Commands
 
 ```bash
