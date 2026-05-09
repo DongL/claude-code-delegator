@@ -41,4 +41,4 @@ bash scripts/run-claude-code.sh --flash "test prompt"
 - Subagents default to `off`; the wrapper passes `--disallowedTools Task Agent` unless `--allow-subagents` or `CLAUDE_DELEGATOR_SUBAGENTS=on` is set.
 - Quiet mode emits an immediate/progress heartbeat to stderr. Use `CLAUDE_DELEGATOR_HEARTBEAT_SECONDS=0` to disable it.
 - Compact output includes profiling metadata. Set `CLAUDE_DELEGATOR_PROFILE_LOG` to append JSONL records.
-- When consumed by an orchestrator, set `CLAUDE_DELEGATOR_DIR` to this project's root before invoking.
+- When consumed by an orchestrator, set `CLAUDE_DELEGATE_DIR` to this project's root before invoking.
