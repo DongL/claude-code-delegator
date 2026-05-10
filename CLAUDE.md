@@ -7,8 +7,9 @@ A toolkit that lets an orchestrating AI (Codex, Cursor, etc.) delegate implement
 ## Key files
 
 - `SKILL.md` — The orchestrator contract. This is what Codex/the orchestrator reads to understand the delegation workflow.
-- `scripts/run-claude-code.sh` — The wrapper that invokes Claude Code with consistent flags.
-- `scripts/delegation-adapter.py` — Classifies tasks, wraps full prompts in templates, and writes metadata for the wrapper.
+- `scripts/run-claude-code.sh` — The wrapper that parses flags and delegates to the pipeline.
+- `scripts/pipeline.py` — The delegation pipeline: classify → envelope → invoke → compact → profile.
+- `scripts/run-pipeline.py` — Thin CLI entry point that the wrapper calls.
 - `scripts/compact-claude-stream.py` — Compacts JSON stream output into a readable report.
 - `scripts/aggregate-profile-log.py` — Aggregates CLAUDE_DELEGATE_PROFILE_LOG JSONL into a summary.
 - `scripts/jira-safe-text.py` — Strips Markdown for Jira MCP plain-text comments.
@@ -39,6 +40,6 @@ bash scripts/run-claude-code.sh --flash "test prompt"
 - MCP defaults to `all`, preserving normal Claude Code project/user MCP discovery. Use `--mcp none` for a strict empty MCP config, or `--mcp jira|linear|sequential-thinking` to load only one server from `.mcp.json`.
 - Prompt adaptation defaults to `auto`. Templates preserve the full original prompt; use `--full-context` or `CLAUDE_DELEGATE_CONTEXT_MODE=full` to bypass templates.
 - Subagents default to `off`; the wrapper passes `--disallowedTools Task Agent` unless `--allow-subagents` or `CLAUDE_DELEGATE_SUBAGENTS=on` is set.
-- Quiet mode emits an immediate/progress heartbeat to stderr. Use `CLAUDE_DELEGATE_HEARTBEAT_SECONDS=0` to disable it.
+- Heartbeat runs as a daemon thread in the pipeline. Use `CLAUDE_DELEGATE_HEARTBEAT_SECONDS=0` to disable it.
 - Compact output includes profiling metadata. Set `CLAUDE_DELEGATE_PROFILE_LOG` to append JSONL records.
 - When consumed by an orchestrator, set `CLAUDE_DELEGATE_DIR` to this project's root before invoking.
