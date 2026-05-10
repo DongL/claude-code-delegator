@@ -21,9 +21,16 @@ Required loop:
 
 ## Invocation
 
-Two transports are available: the shell wrapper (this section) and the MCP server (see [MCP Transport](#mcp-transport) below). Both use the same classifier, envelope builder, invoker, and compactor.
+Two transports are available. The orchestrator resolves transport at invocation time:
 
-Always invoke Claude Code through the bundled wrapper. The orchestrator resolves the script path using this fallback chain — no mandatory setup step required:
+1. **MCP-first** — If claude-code-delegate is registered as an MCP server in `.mcp.json`, call `delegate_task` via `tools/call`. This is preferred: typed contract, structured errors, and automatic discovery.
+2. **Shell fallback** — If MCP is not configured, invoke the bundled shell wrapper via `resolve_delegator` below. Same pipeline, CLI interface.
+
+Both transports use the same classifier, envelope builder, invoker, and compactor. The orchestrator should try MCP first, then fall back to the shell wrapper.
+
+### Shell wrapper invocation
+
+The orchestrator resolves the script path using this fallback chain — no mandatory setup step required:
 
 ```bash
 resolve_delegator() {
@@ -95,10 +102,10 @@ Add this to your project `.mcp.json` (or the orchestrator's `.mcp.json`) and the
 | Discovery | Orchestrator must know the resolver path | MCP client discovers tools via `tools/list` |
 | Contract | CLI flags and exit codes | Typed JSON-RPC request/response with structured errors |
 | Errors | Exit code + stderr | JSON-RPC error objects with standard codes |
-| Invocation | `"$(resolve_delegator)" "$PROMPT"` | `tools/call` with typed arguments |
+| Invocation | Fallback — `"$(resolve_delegator)" "$PROMPT"` | Preferred — `tools/call` with typed arguments |
 | Dependencies | bash + python3 | Requires `pip install mcp` |
 
-The shell wrapper remains the primary transport and does not require the `mcp` package. The MCP server is additive — when an MCP host is available, it provides typed discovery and structured responses without changing the shell-wrapper interface.
+When MCP is available, the orchestrator uses `delegate_task`. When MCP is not available, the orchestrator falls back to the shell wrapper.
 
 ## Prompt Requirements
 
@@ -111,6 +118,8 @@ The prompt sent to Claude Code must include:
 - A recommendation to apply Karpathy-style coding guidelines if available (e.g., `/andrej-karpathy-skills:karpathy-guidelines` in Codex). Key principles: make surgical changes, prefer boring code, avoid overcomplication, surface assumptions, and define verifiable success criteria before starting.
 - Verification commands to run.
 - A request to report changed files and command results.
+
+When using MCP transport, the orchestrator calls `delegate_task` with the plan as the prompt argument. The tool handles classification, envelope, invocation, and compaction automatically.
 
 Before invoking Claude Code, show the user the concrete implementation plan the orchestrator authored. This should be concise but specific enough to make ownership boundaries and verification commands visible.
 
