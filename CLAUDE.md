@@ -4,6 +4,8 @@
 
 A toolkit that lets an orchestrating AI (Codex, Cursor, etc.) delegate implementation plans to Claude Code for execution, then review the resulting diff.
 
+When `$claude-code-delegate` is invoked, follow the gate checklist in `SKILL.md` exactly.
+
 ## Key files
 
 - `SKILL.md` — The orchestrator contract. This is what Codex/the orchestrator reads to understand the delegation workflow.
